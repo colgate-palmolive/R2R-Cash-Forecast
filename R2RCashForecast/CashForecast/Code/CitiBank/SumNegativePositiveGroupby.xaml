@@ -1,0 +1,303 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="SumNegativePositiveGroupby" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_DT" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="in_File" Type="InArgument(x:String)" />
+    <x:Property Name="in_FileName" Type="InArgument(x:String)" />
+    <x:Property Name="io_Config" Type="InOutArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_ExceptionVar" Type="OutArgument(s:Exception)" />
+    <x:Property Name="out_ExceptionMsg" Type="OutArgument(x:String)" />
+    <x:Property Name="in_workbook" Type="InArgument(ui:WorkbookApplication)" />
+    <x:Property Name="out_WorkflowIndicator" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>532,1359.2</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>SumNegativePositiveGroupby_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="23">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Excel</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="46">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.CV</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="SumNegativePositiveGroupby" sap:VirtualizedContainerService.HintSize="512,1299.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="strErrorMessage" />
+      <Variable x:TypeArguments="x:String" Name="strOutput" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtGroupSum" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtOutput" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtGRIR" />
+      <Variable x:TypeArguments="x:String" Default="[io_Config(&quot;LogPath&quot;).ToString]" Name="in_LogPath" />
+      <Variable x:TypeArguments="x:String" Name="strDT" />
+      <Variable x:TypeArguments="sd:DataTable" Name="DtReplacePosNeg" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <TryCatch DisplayName="Try Block" sap:VirtualizedContainerService.HintSize="470.4,1206.4" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Citi File Application Scope" sap:VirtualizedContainerService.HintSize="433.6,975.2" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_1" WorkbookPath="[in_File]">
+          <ui:ExcelApplicationScope.Body>
+            <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="375.2,865.6" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:LogMessage DisplayName="Orchestrator Log Message" sap:VirtualizedContainerService.HintSize="333.6,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;------Sumup the Positive and negative values for file : &quot; + in_FileName.ToString + &quot;------&quot;]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:LogMessage>
+                <ui:AppendLine DisplayName="Log Writing" FileName="[in_LogPath + DateString + &quot;.txt&quot;]" sap:VirtualizedContainerService.HintSize="333.6,52.8" sap2010:WorkflowViewState.IdRef="AppendLine_2" Text="[&quot;------ [&quot;+ DateTime.now.ToLocalTime.ToString + &quot;]------&quot; + &quot;--- Sumup the Positive and negative values for file : &quot; + in_FileName.ToString +  &quot;---&quot;]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:AppendLine>
+                <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim Groups As List(Of DataTable)&#xA;Dim drDataRow As DataRow&#xA;Dim tableResult As New DataTable&#xA;Dim grp As DataTable&#xA;Dim strErrorMessage As String&#xA;Dim strCurrency As String&#xA;Try&#xA;&#x9;&#x9;'Assign Error to nothing&#xA;&#x9;&#x9;strErrorMessage = String.Empty&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;'Add a column to hold the sum as double, as the data read from excel seems to be in object&#xA;&#x9;&#x9; dtInput.Columns.Add(&quot;AmountInteger&quot;,Type.GetType(&quot;System.Double&quot;))&#xA;&#x9;&#x9; &#xA;&#x9;&#x9; 'Copy the amount (object type) into double column&#xA;&#x9;&#x9; For Each drDataRow In dtInput.Rows&#xA;&#x9;&#x9;&#x9;drDataRow(&quot;AmountInteger&quot;) = If(drDataRow(&quot;Amount&quot;) Is System.DBNull.Value,0, Convert.ToDouble(drDataRow(&quot;Amount&quot;)))&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9; Next&#xA;&#x9;&#x9; &#xA;&#x9;&#x9; 'Create an enumerable collection by grouping based on 3 columns (Account,Purchasing Document and Line item&#xA;&#x9;&#x9; If dtInput.Columns.Contains (&quot;Transaction Currency&quot;)  Then&#xA;&#x9;&#x9; Groups =  dtInput.AsEnumerable().GroupBy(Function(row) New With {Key.ValueDate= row.Field(Of Object)(&quot;Value Date&quot;),Key.Currency= row.Field(Of Object)(&quot;Transaction Currency&quot;)}).[Select](Function(g) g.CopyToDataTable()).ToList()&#xA;&#x9; Else &#xA;&#x9;&#x9; Groups =  dtInput.AsEnumerable().GroupBy(Function(row) New With {Key.ValueDate= row.Field(Of Object)(&quot;Value Date&quot;),Key.Currency= row.Field(Of Object)(&quot;Currency&quot;)}).[Select](Function(g) g.CopyToDataTable()).ToList()&#xA;&#x9;&#x9;End If&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;'Adding required columns to the resultant datatable&#xA;&#x9;&#x9;tableResult.Columns.Add(&quot;ValueDate&quot;, Type.GetType(&quot;System.String&quot;))&#xA;&#x9;&#x9;tableResult.Columns.Add(&quot;Currency&quot;, Type.GetType(&quot;System.String&quot;))&#xA;&#x9;&#x9;tableResult.Columns.Add(&quot;TotalPositiveAmount&quot;, Type.GetType(&quot;System.String&quot;))&#xA;&#x9;&#x9;tableResult.Columns.Add(&quot;TotalNegativeAmount&quot;, Type.GetType(&quot;System.String&quot;))&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;'Looping through the groups and getting the final datatable populated.&#xA;&#x9;&#x9;For Each grp In Groups&#xA;&#x9;&#x9;&#x9;&#x9;If grp.Columns.Contains(&quot;Transaction Currency&quot;) Then&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;strCurrency = grp.Rows(0)(&quot;Transaction Currency&quot;).ToString&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;ElseIf grp.Columns.Contains(&quot;Currency&quot;) Then&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;strCurrency = grp.Rows(0)(&quot;Currency&quot;).ToString&#xA;&#x9;&#x9;&#x9;&#x9;End If&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;'tableResult.Rows.Add(grp.Rows(0)(&quot;Value Date&quot;).ToString().Substring(0,10),strCurrency,Convert.ToDouble(grp.Compute(&quot;SUM(AmountInteger)&quot;,&quot;AmountInteger&gt;0&quot;)).ToString,Convert.ToDouble(grp.Compute(&quot;SUM(AmountInteger)&quot;,&quot;AmountInteger&lt;0&quot;)).ToString)&#xA;&#x9;&#x9;&#x9;&#x9;'strCurrency = grp.Rows(0)(&quot;Currency&quot;).ToString&#xA;&#x9;&#x9;&#x9;&#x9;tableResult.Rows.Add(If(Convert.ToString(grp.Rows(0)(&quot;Value Date&quot;)).Length&gt;10,Convert.ToString(grp.Rows(0)(&quot;Value Date&quot;)).Substring(0,10),Convert.ToString(grp.Rows(0)(&quot;Value Date&quot;))),strCurrency,Convert.ToString(grp.Compute(&quot;SUM(AmountInteger)&quot;,&quot;AmountInteger&gt;0&quot;)),Convert.ToString(grp.Compute(&quot;SUM(AmountInteger)&quot;,&quot;AmountInteger&lt;0&quot;)))&#xA;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;Next&#xA;&#x9;&#x9;&#xA;Catch ex As Exception &#xA;&#x9;strException = strException + ex.Message&#xA;Finally&#xA;&#x9;&#x9;'Returning the resultant Datatable&#xA;&#x9;&#x9;dtOutput = tableResult&#xA;&#x9;&#x9;tableResult = Nothing&#xA;&#x9;&#x9;dtInput = Nothing&#xA;&#x9;&#x9;grp = Nothing&#xA;&#x9;&#x9;drDataRow = Nothing&#xA;End Try" DisplayName="Perform Grouping and Summation" sap:VirtualizedContainerService.HintSize="333.6,164.8" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+                  <ui:InvokeCode.Arguments>
+                    <InArgument x:TypeArguments="sd:DataTable" x:Key="dtInput">[out_DT]</InArgument>
+                    <OutArgument x:TypeArguments="sd:DataTable" x:Key="dtOutput">[dtGroupSum]</OutArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="strException">[out_ExceptionMsg]</OutArgument>
+                  </ui:InvokeCode.Arguments>
+                </ui:InvokeCode>
+                <ui:ExcelWriteRange AddHeaders="True" DataTable="[dtGroupSum]" DisplayName="Write SumOutput DT " sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_1" SheetName="SumOutput" StartingCell="A1" />
+                <Sequence DisplayName="add blank rows as 1 and -1 for positive and negative" sap:VirtualizedContainerService.HintSize="333.6,68.8" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:ExcelReadRange AddHeaders="True" DataTable="[DtReplacePosNeg]" DisplayName="Read Range sumop" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="ExcelReadRange_1" SheetName="SumOutput">
+                    <ui:ExcelReadRange.Range>
+                      <InArgument x:TypeArguments="x:String">
+                        <Literal x:TypeArguments="x:String" Value="" />
+                      </InArgument>
+                    </ui:ExcelReadRange.Range>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ExcelReadRange>
+                  <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[DtReplacePosNeg]" DisplayName="For Each Row to replace the values for blank rows as 1 and -1" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                    <ui:ForEachRow.Body>
+                      <ActivityAction x:TypeArguments="sd:DataRow">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                        </ActivityAction.Argument>
+                        <If Condition="[row(&quot;TotalPositiveAmount&quot;).ToString=&quot;0&quot; or row(&quot;TotalPositiveAmount&quot;).ToString=&quot;&quot;]" DisplayName="If Total positive is blank or 0" sap:VirtualizedContainerService.HintSize="506.4,209.6" sap2010:WorkflowViewState.IdRef="If_2">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <If.Then>
+                            <Assign DisplayName="Assign 1 for positive" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[row("TotalPositiveAmount")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">["1"]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </If.Then>
+                          <If.Else>
+                            <If Condition="[row(&quot;TotalNegativeAmount&quot;).ToString=&quot;0&quot; or row(&quot;TotalNegativeAmount&quot;).ToString=&quot;&quot;]" DisplayName="If total negative is blank or 0" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="If_1">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <If.Then>
+                                <Assign DisplayName="Assign -1 for negative" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Object">[row("TotalNegativeAmount")]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Object">["-1"]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </If.Then>
+                            </If>
+                          </If.Else>
+                        </If>
+                      </ActivityAction>
+                    </ui:ForEachRow.Body>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ForEachRow>
+                  <ui:ExcelWriteRange AddHeaders="True" DataTable="[DtReplacePosNeg]" DisplayName="Write Range sumop" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_2" SheetName="SumOutput" StartingCell="A1">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ExcelWriteRange>
+                </Sequence>
+                <ui:LogMessage DisplayName="Orchestrator Log Message" sap:VirtualizedContainerService.HintSize="333.6,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;------&quot; + &quot;Grouping the Positive and negative values successful for the file : &quot;+  in_FileName.ToString + &quot;------&quot;]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:LogMessage>
+                <ui:AppendLine DisplayName="Log Writing" FileName="[in_LogPath + DateString + &quot;.txt&quot;]" sap:VirtualizedContainerService.HintSize="333.6,52.8" sap2010:WorkflowViewState.IdRef="AppendLine_3" Text="[&quot;------ [&quot;+ DateTime.now.ToLocalTime.ToString + &quot;]------&quot; + &quot;--- Grouping the Positive and negative values successful for the file : &quot;+  in_FileName.ToString +  &quot;---&quot;]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:AppendLine>
+              </Sequence>
+            </ActivityAction>
+          </ui:ExcelApplicationScope.Body>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:ExcelApplicationScope>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="436.8,22.4" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Exception Handling" sap:VirtualizedContainerService.HintSize="375.2,783.2" sap2010:WorkflowViewState.IdRef="Sequence_7">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:AppendLine DisplayName="Log Writing" FileName="[in_LogPath + DateString + &quot;.txt&quot;]" sap:VirtualizedContainerService.HintSize="333.6,134.4" sap2010:WorkflowViewState.IdRef="AppendLine_1" Text="[&quot;------ [&quot;+ DateTime.now.ToLocalTime.ToString + &quot;]------&quot; + &quot;---EXCEPTION : Occured while sumpup the positive and negative values for Citi Bank Files---&quot; + exception.Message.ToString]" />
+              <Assign DisplayName="Assign Exception" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="s:Exception">[out_ExceptionVar]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="s:Exception">[exception]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="Assign Exception Message" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_2">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[out_ExceptionMsg]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[exception.GetType.Name + " " + exception.Message + " " + exception.StackTrace + " " + exception.Source]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[out_WorkflowIndicator]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">Exception occured while summing up the positive and negative values for Citi bank file</InArgument>
+                </Assign.Value>
+              </Assign>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke MoveFileToErrorFolder workflow" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Code\MoveFileToErrorFolder.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_FileName">[in_FileName]</InArgument>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_config">[io_Config]</InArgument>
+                  <OutArgument x:TypeArguments="s:Exception" x:Key="out_exceptionVar">[out_ExceptionVar]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_exceptionMsg">[out_ExceptionMsg]</OutArgument>
+                  <InArgument x:TypeArguments="ui:WorkbookApplication" x:Key="in_Workbook">[in_workbook]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_WorkflowIndicatormsg">[out_WorkflowIndicator]</OutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke SendExceptionMail workflow" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Code\SendExceptionMail.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[io_Config]</InArgument>
+                  <InOutArgument x:TypeArguments="s:Exception" x:Key="io_ExceptionVar">[out_ExceptionVar]</InOutArgument>
+                  <InOutArgument x:TypeArguments="x:String" x:Key="io_ExceptionMsg">[out_ExceptionMsg]</InOutArgument>
+                  <InOutArgument x:TypeArguments="x:String" x:Key="io_WorkflowIndicator">[out_WorkflowIndicator]</InOutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+  </Sequence>
+</Activity>

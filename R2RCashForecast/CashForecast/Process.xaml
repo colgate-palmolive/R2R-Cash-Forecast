@@ -1,0 +1,133 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Process" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Transaction item to be processed." Name="in_TransactionItem" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Dictionary structure to store configuration data of the process (settings, constants and assets)." Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="io_ExceptionVar" Type="InOutArgument(s:Exception)" />
+    <x:Property Name="io_ExceptionMsg" Type="InOutArgument(x:String)" />
+    <x:Property Name="in_CitiFile" Type="InArgument(x:String)" />
+    <x:Property Name="io_CitiFileName" Type="InOutArgument(x:String)" />
+    <x:Property Name="io_CitiSheetName" Type="InArgument(x:String)" />
+    <x:Property Name="in_CPWorksheetDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_DwldWorkbook" Type="InArgument(ui:WorkbookApplication)" />
+    <x:Property Name="io_CitiCompanyCode" Type="InOutArgument(x:String)" />
+    <x:Property Name="io_MassCompanyCode" Type="InOutArgument(x:String)" />
+    <x:Property Name="io_FileType" Type="InArgument(x:String)" />
+    <x:Property Name="io_WorkflowIndicator" Type="InOutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>408,732.8</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.CV</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Invoke major steps of the business process, which are usually implemented by multiple subworkflows.&#xA;&#xA;If a BusinessRuleException is thrown, the transaction is skipped. &#xA;If another kind of exception occurs, the current transaction can be retried. " DisplayName="Process" sap:VirtualizedContainerService.HintSize="388,672.8" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessCitiFileFromInProgress workflow" sap:VirtualizedContainerService.HintSize="346.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Code\CitiBank\ProcessCitiFileFromInProgress.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="io_Config">[in_Config]</InOutArgument>
+        <InOutArgument x:TypeArguments="x:String" x:Key="io_Sheet">[io_CitiSheetName]</InOutArgument>
+        <InOutArgument x:TypeArguments="x:String" x:Key="io_FileName">[io_CitiFileName]</InOutArgument>
+        <OutArgument x:TypeArguments="s:Exception" x:Key="out_ExceptionVar">[io_ExceptionVar]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMsg">[io_ExceptionMsg]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_CitiCompCode">[io_CitiCompanyCode]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_InProgressFilePath">[in_TransactionItem]</InArgument>
+        <InArgument x:TypeArguments="ui:WorkbookApplication" x:Key="in_Workbook">[in_DwldWorkbook]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_File">[in_CitiFile]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_FileType">[io_FileType]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_MassCompCode">[io_MassCompanyCode]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_WorkflowIndicator">[io_WorkflowIndicator]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ReadCPW workflow" sap:VirtualizedContainerService.HintSize="346.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Code/CashPositionWorksheet/ReadCPW.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="io_CPWdt">[in_CPWorksheetDT]</InOutArgument>
+        <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="io_Config">[in_Config]</InOutArgument>
+        <OutArgument x:TypeArguments="s:Exception" x:Key="out_ExceptionVar">[io_ExceptionVar]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMsg">[io_ExceptionMsg]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke UpdateCPW workflow" sap:VirtualizedContainerService.HintSize="346.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Code/CashPositionWorksheet/UpdateCPW.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_CPWFileDT">[in_CPWorksheetDT]</InArgument>
+        <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="io_Config">[in_Config]</InOutArgument>
+        <OutArgument x:TypeArguments="s:Exception" x:Key="out_ExceptionVar">[io_ExceptionVar]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMsg">[io_ExceptionMsg]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_CitiCompanyCode">[io_CitiCompanyCode]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_CitiInprgFile">[in_TransactionItem]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_MassCompanyCode">[io_MassCompanyCode]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_FileType">[io_FileType]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Move File InProgressToArchive workflow" sap:VirtualizedContainerService.HintSize="346.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Code\InProgressToArchive.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="io_Config">[in_Config]</InOutArgument>
+        <OutArgument x:TypeArguments="s:Exception" x:Key="out_ExceptionVar">[io_ExceptionVar]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMsg">[io_ExceptionMsg]</OutArgument>
+        <InArgument x:TypeArguments="x:Object" x:Key="in_File">[in_TransactionItem]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_FileName">[io_CitiFileName]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_WorkflowIndi">[io_WorkflowIndicator]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+  </Sequence>
+</Activity>

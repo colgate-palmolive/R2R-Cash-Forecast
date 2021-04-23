@@ -1,0 +1,179 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="BusinessDayChecker" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_PcolumnRow" Type="InOutArgument(sd:DataRow)" />
+    <x:Property Name="in_ValueDate" Type="InArgument(s:DateTime)" />
+    <x:Property Name="in_HolidayDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="out_ExceptionVar" Type="OutArgument(s:Exception)" />
+    <x:Property Name="out_ExceptionMsg" Type="OutArgument(x:String)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_FileName" Type="InArgument(x:String)" />
+    <x:Property Name="in_excelWorkbook" Type="InArgument(ui:WorkbookApplication)" />
+    <x:Property Name="in_NoOfDay" Type="InArgument(x:String)" />
+    <x:Property Name="out_WorkflowIndicatorMsg" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>498.4,641.6</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>BusinessDayChecker_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="42">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="44">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.CV</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="BusinessDayChecker" sap:VirtualizedContainerService.HintSize="478.4,581.6" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="strResultVar" />
+      <Variable x:TypeArguments="s:DateTime" Name="dtResult" />
+      <Variable x:TypeArguments="sd:DataRow" Name="DrResult" />
+      <Variable x:TypeArguments="x:String" Default="[in_Config(&quot;LogPath&quot;).ToString]" Name="in_LogPath" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <TryCatch DisplayName="Try Catch block" sap:VirtualizedContainerService.HintSize="436.8,488.8" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence DisplayName="Try Block" sap:VirtualizedContainerService.HintSize="375.2,257.6" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim incBD As Integer = 0 &#xA;Dim dtNow As DateTime = dtStart&#xA;Dim incWeCrit As Boolean&#xA;Dim incHdCrit As Boolean&#xA;Dim incCrit As Boolean&#xA; &#xA;&#x9;&#xA;Try&#xA;&#x9;'If(DrResult(&quot;P&quot;).ToString.ToLower.Equals(&quot;t&quot;)) Then&#xA;&#x9;&#x9;'NoBD = 2&#xA;&#x9;&#x9;'DrResult(&quot;Value Date&quot;) =dtStart.AddDays(2)&#xA;&#x9;'Else If (DrResult(&quot;P&quot;).ToString.ToLower.Equals(&quot;s&quot;))&#xA;&#x9;&#x9;'NoBD = 1&#xA;&#x9;&#x9;'DrResult(&quot;Value Date&quot;) =dtStart.AddDays(1)&#xA;&#x9;'End If&#xA;&#x9;While incBD &lt; NoBD&#xA;&#x9;&#x9;dtNow = dtNow.AddDays(1)&#xA;&#x9;&#x9;incCrit = incWeCrit = incHdCrit = False&#xA;&#x9;&#x9;&#xA;&#x9;   'If weekend to be included and the date is not a saturday and sunday&#xA;&#x9;   incWeCrit = (blnWeekendAsHolidays = False)&#xA;&#x9;   incWeCrit = ((blnWeekendAsHolidays = True) And (dtNow.DayOfWeek &lt;&gt; DayOfWeek.Saturday And dtNow.DayOfWeek &lt;&gt; DayOfWeek.Sunday))  &#xA;&#x9;   &#xA;&#x9;   'If the date does not fall on a holiday&#xA;&#x9;   incHDCrit = (Not dtHolidayList.Contains(dtNow))&#xA;&#x9;   &#xA;&#x9;   'Count day if criteria satisfy&#xA;&#x9;   incBD += If((incWeCrit = True And incHdCrit = True ),1,0)&#xA;&#x9;End While&#xA;Catch&#xA;&#x9;dtNow = Nothing&#xA;Finally&#xA;&#x9;DrResult(&quot;Value Date&quot;) =dtNow&#xA;&#x9;'dtResult = dtNow&#xA;End Try&#x9;&#xA;&#xA;&#xA;&#xA;" DisplayName="Invoke code- S &amp; T logic" sap:VirtualizedContainerService.HintSize="333.6,164.8" sap2010:WorkflowViewState.IdRef="InvokeCode_2">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="s:DateTime" x:Key="dtStart">[in_ValueDate]</InArgument>
+              <InArgument x:TypeArguments="x:Int32" x:Key="NoBD">[Convert.ToInt16(in_NoOfDay)]</InArgument>
+              <InArgument x:TypeArguments="s:DateTime" x:Key="dtResult">[dtResult]</InArgument>
+              <InArgument x:TypeArguments="scg:List(s:DateTime)" x:Key="dtHolidayList">[New List(Of DateTime)({})]</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="blnWeekendAsHolidays">True</InArgument>
+              <InOutArgument x:TypeArguments="sd:DataRow" x:Key="DrResult">[in_PcolumnRow]</InOutArgument>
+            </ui:InvokeCode.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeCode>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="403.2,22.4" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Exception Handling" sap:VirtualizedContainerService.HintSize="375.2,780" sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:AppendLine DisplayName="Log Writing" FileName="[in_LogPath + DateString + &quot;.txt&quot;]" sap:VirtualizedContainerService.HintSize="333.6,134.4" sap2010:WorkflowViewState.IdRef="AppendLine_1" Text="[&quot;------ [&quot;+ DateTime.now.ToLocalTime.ToString + &quot;]------&quot; + &quot;---EXCEPTION : Occured while downloading Mass Payment Emails ---&quot; + exception.Message.ToString]" />
+              <Assign DisplayName="Assign Exception" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="s:Exception">[out_ExceptionVar]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="s:Exception">[exception]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="Assign Excpetion Message" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_2">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[out_ExceptionMsg]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[exception.GetType.Name + " " + exception.Message + " " + exception.StackTrace + " " + exception.Source]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[out_WorkflowIndicatorMsg]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">Exception Occured while checking the keywords for Mass payment</InArgument>
+                </Assign.Value>
+              </Assign>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke MoveFileToErrorFolder workflow" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Code\MoveFileToErrorFolder.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_FileName">[in_FileName]</InArgument>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_config">[in_Config]</InArgument>
+                  <OutArgument x:TypeArguments="s:Exception" x:Key="out_exceptionVar">[out_ExceptionVar]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_exceptionMsg">[out_ExceptionMsg]</OutArgument>
+                  <InArgument x:TypeArguments="ui:WorkbookApplication" x:Key="in_Workbook">[in_excelWorkbook]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_WorkflowIndicatormsg">[out_WorkflowIndicatorMsg]</OutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke SendExceptionMail workflow" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Code\SendExceptionMail.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                  <InOutArgument x:TypeArguments="s:Exception" x:Key="io_ExceptionVar">[out_ExceptionVar]</InOutArgument>
+                  <InOutArgument x:TypeArguments="x:String" x:Key="io_ExceptionMsg">[out_ExceptionMsg]</InOutArgument>
+                  <InOutArgument x:TypeArguments="x:String" x:Key="io_WorkflowIndicator">[out_WorkflowIndicatorMsg]</InOutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+  </Sequence>
+</Activity>
